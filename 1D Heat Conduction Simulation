@@ -1,0 +1,31 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Simulation Parameters
+length = 1.0  # Length of the rod [m]
+dx = 0.01     # Spatial step [m]
+nx = int(length / dx)  # Number of grid points
+alpha = 0.01  # Thermal diffusivity [m^2/s]
+dt = 0.01     # Time step [s]
+steps = 500   # Number of time steps
+
+# Initial Condition
+T = np.zeros(nx)  # Initial temperature
+T[nx // 2] = 100  # Heat source at the center
+
+# Simulation Loop
+for step in range(steps):
+    T_new = T.copy()
+    T_new[1:-1] = T[1:-1] + alpha * dt / dx**2 * (T[2:] - 2 * T[1:-1] + T[:-2])
+    T = T_new
+
+# Plot Results
+x = np.linspace(0, length, nx)
+plt.figure(figsize=(8, 5))
+plt.plot(x, T, label='Final Temperature Distribution', color='blue')
+plt.xlabel('Position [m]')
+plt.ylabel('Temperature [°C]')
+plt.title('1D Heat Conduction Simulation')
+plt.legend()
+plt.grid()
+plt.show()
